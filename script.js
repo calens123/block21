@@ -83,28 +83,40 @@ async function deleteParty(event) {
     const partyId = event.target.dataset.partyId;
     console.log(partyId);
 
-    // Send a DELETE request to remove the party
+    // Send a DELETE request to the API endpoint for specific party ID (API_URL)/(partyId)
     try {
       await fetch(`${API_URL}/${partyId}`, {
         method: "DELETE",
       });
 
-      // Remove the deleted party from the party list
+      // Removes the entire <li> containing the delete button selected from the UI
       event.target.parentElement.remove();
+      //Log any errors that occur during above request
     } catch (error) {
       console.log(error);
     }
   }
 }
+// Summary of above flow:
+// 1. User clicks one of the delete buttons
+// 2. Function checks if the clicked element has the delete-button class
+// 3. Retrieves the party ID from the buttons data-party-id attribute
+// 4. Sends DELETE request to API for the party to be removed
+// 5. If successful the <li> containing the party will be removed from the UI
+// 6. If an error occurs: Logs error in console
 
-// Render the party list
+// Render the party list in the DOM
+// Loops thru the parties stored in state.parties array
+// Calls renderParty(party) for each party to create and display corresponding HTML in the <ul id="partyList"></ul>
 function renderPartyList() {
   state.parties.forEach((party) => {
     renderParty(party);
   });
 }
 
-// Render a party item
+// Render a party item in the DOM
+// Split so renderPartyList focuses on managing array of parties. renderParty focuses on rendering the attributes of the party.
+// This function takes a single party obj and creates the <li> element for displaying its details. Then adds it to the partyList in the DOM
 function renderParty(party) {
   const li = document.createElement("li");
   li.innerHTML = /* html */ `
